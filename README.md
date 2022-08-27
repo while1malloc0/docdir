@@ -15,3 +15,14 @@ $ cd examples/simple
 $ docdir no-summary
 no-summary
 ```
+
+Any subdirectories will be printed a-la `tree`.
+
+```shell
+$ cd examples/nested
+$ docdir no-summary
+no-summary
+├── has-no-sub-dirs
+└── has-sub-dirs
+    └── a-sub-dir
+```
