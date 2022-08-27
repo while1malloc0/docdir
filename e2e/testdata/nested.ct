@@ -1,0 +1,6 @@
+$ cd examples/nested
+$ docdir no-summary
+no-summary
+├── has-no-sub-dirs
+└── has-sub-dirs
+    └── a-sub-dir

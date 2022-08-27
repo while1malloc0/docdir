@@ -11,6 +11,7 @@ import (
 )
 
 func TestSimple(t *testing.T) {
+	originalDir, _ := os.Getwd()
 	testData, err := os.Open("e2e/testdata/simple.ct")
 	if err != nil {
 		t.Fatalf("could not read test data: %v", err)
@@ -33,6 +34,7 @@ func TestSimple(t *testing.T) {
 	if got.String() != want.String() {
 		t.Fatalf("expected:\n%s\ngot:\n%s\n", want.String(), got.String())
 	}
+	os.Chdir(originalDir)
 }
 
 func execCommand(t *testing.T, line string, out io.Writer) {
