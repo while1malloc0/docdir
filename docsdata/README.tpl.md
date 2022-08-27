@@ -9,9 +9,4 @@ A small tool for summarizing directory structures
 ## Quickstart
 
 Running `docdir` on an empty directory with no summary files will simply print the name of the directory.
-
-```shell
-$ cd examples/simple
-$ docdir no-summary
-no-summary
-```
+[embedmd]:# (../e2e/testdata/simple.ct shell)
