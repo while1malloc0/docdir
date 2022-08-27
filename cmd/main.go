@@ -15,6 +15,6 @@ func main() {
 
 func run() error {
 	flag.Parse()
-	fmt.Println(flag.Arg(1))
+	fmt.Println(flag.Arg(0))
 	return nil
 }

@@ -36,6 +36,7 @@ func TestSimple(t *testing.T) {
 }
 
 func execCommand(t *testing.T, line string, out io.Writer) {
+	t.Helper()
 	line = line[1:] // trim off the $
 	var cmdAndArgs []string
 	for _, part := range strings.Split(line, " ") {
@@ -52,7 +53,7 @@ func execCommand(t *testing.T, line string, out io.Writer) {
 			t.Fatalf("unexpected error running command cd: %v", err)
 		}
 	default:
-		cmd := exec.Command(cmdAndArgs[0], cmdAndArgs...)
+		cmd := exec.Command(cmdAndArgs[0], cmdAndArgs[1:]...)
 		cmd.Stdout = out
 		cmd.Stderr = out
 		cmd.Env = nil
