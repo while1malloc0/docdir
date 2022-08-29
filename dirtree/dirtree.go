@@ -70,15 +70,15 @@ func visit(w io.Writer, node *Node, prefix string) error {
 		s = fmt.Sprintf("%s # %s", node.Name, node.Description)
 	}
 	fmt.Fprintln(w, s)
-	add := "│   "
+	padding := "│   "
 	for i, child := range node.Children {
 		if i == len(node.Children)-1 {
 			fmt.Fprintf(w, prefix+"└── ")
-			add = "    "
+			padding = "    "
 		} else {
 			fmt.Fprintf(w, prefix+"├── ")
 		}
-		err := visit(w, child, prefix+add)
+		err := visit(w, child, prefix+padding)
 		if err != nil {
 			return err
 		}
@@ -89,21 +89,10 @@ func visit(w io.Writer, node *Node, prefix string) error {
 func align(in string) string {
 	var out strings.Builder
 
-	scanner := bufio.NewScanner(strings.NewReader(in))
-	longest := -1
-	for scanner.Scan() {
-		line := scanner.Text()
-		parts := strings.Split(line, "#")
-		nameAndIndent := strings.TrimRight(parts[0], " ")
-		nameAndIndent = strings.Replace(nameAndIndent, "├──", "   ", 1)
-		nameAndIndent = strings.Replace(nameAndIndent, "└──", "   ", 1)
-		if len(nameAndIndent) > longest {
-			longest = len(nameAndIndent)
-		}
-	}
+	longest := findLongest(in)
 	// longest name+indent pair + 2 spaces
 	lengthToMeet := longest + 2
-	scanner = bufio.NewScanner(strings.NewReader(in))
+	scanner := bufio.NewScanner(strings.NewReader(in))
 	for scanner.Scan() {
 		line := scanner.Text()
 		parts := strings.Split(line, "#")
@@ -113,11 +102,8 @@ func align(in string) string {
 			continue
 		}
 		nameAndIndent := strings.TrimRight(parts[0], " ")
-		normalizedLen := nameAndIndent
-		normalizedLen = strings.Replace(normalizedLen, "├──", "   ", 1)
-		normalizedLen = strings.Replace(normalizedLen, "└──", "   ", 1)
 		description := strings.TrimSpace(parts[1])
-		paddingNeeded := lengthToMeet - len(normalizedLen)
+		paddingNeeded := lengthToMeet - normalizedLen(nameAndIndent)
 		padding := strings.Repeat(" ", paddingNeeded)
 		fmt.Fprintf(&out, "%s%s# %s\n", nameAndIndent, padding, description)
 	}
@@ -133,4 +119,29 @@ func filterNonDirs(path string, candidates []string) []string {
 		}
 	}
 	return dirs
+}
+
+// return the length of a string from a visual perspective, e.g. each character
+// is one space, regardless of unicode
+func normalizedLen(s string) int {
+	s = strings.Replace(s, "├──", "   ", 1)
+	s = strings.Replace(s, "└──", "   ", 1)
+	return len(s)
+}
+
+// returns the length of the longest string after stripping descriptions and
+// normalizing string len
+func findLongest(s string) int {
+	scanner := bufio.NewScanner(strings.NewReader(s))
+	longest := -1
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Split(line, "#")
+		nameAndIndent := strings.TrimRight(parts[0], " ")
+		visualLen := normalizedLen(nameAndIndent)
+		if visualLen > longest {
+			longest = visualLen
+		}
+	}
+	return longest
 }
