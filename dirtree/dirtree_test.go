@@ -63,3 +63,15 @@ func TestGrandChildren(t *testing.T) {
 		t.Fatalf("expected third child of node AA to have name ccc, had %s", grandchildren[2].Name)
 	}
 }
+
+func TestDescription(t *testing.T) {
+	subject, err := dirtree.New("testdata/a")
+	if err != nil {
+		t.Fatalf("unexpected error reading testdata: %v", err)
+	}
+	want := "a is the root testing directory"
+	got := subject.Description
+	if got != want {
+		t.Fatalf("expected %s got %s", want, got)
+	}
+}

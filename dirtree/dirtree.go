@@ -4,15 +4,19 @@ package dirtree
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 )
 
+const DefaultDescriptionFile = "DESCRIPTION"
+
 type Node struct {
-	Name     string
-	Children []*Node
+	Name        string
+	Description string
+	Children    []*Node
 }
 
 func New(path string) (*Node, error) {
@@ -25,6 +29,10 @@ func New(path string) (*Node, error) {
 	}
 
 	n := Node{Name: fi.Name(), Children: []*Node{}}
+	descriptionData, err := ioutil.ReadFile(filepath.Join(path, DefaultDescriptionFile))
+	if err == nil {
+		n.Description = string(descriptionData)
+	}
 
 	dir, err := os.Open(path)
 	if err != nil {
