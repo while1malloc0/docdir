@@ -7,6 +7,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"testing"
+
+	"github.com/while1malloc0/docdir/cmdtest"
 )
 
 func TestMain(m *testing.M) {
@@ -21,6 +23,29 @@ func TestMain(m *testing.M) {
 		os.Exit(1)
 	}
 	os.Exit(exitCode)
+}
+
+func TestE2E(t *testing.T) {
+	cases := []struct {
+		description string
+		testPath    string
+	}{
+		{"a directory with no subdirectories prints the directory", "e2e/testdata/simple.ct"},
+		{"a directory with subdirectories prints a-la tree", "e2e/testdata/nested.ct"},
+		{"a directory with description files prints the descriptions", "e2e/testdata/nested-description.ct"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.description, func(t *testing.T) {
+			run, cleanup, err := cmdtest.ReadFile(tc.testPath)
+			if err != nil {
+				t.Fatalf("unexpected error reading test data: %v", err)
+			}
+			run(t)
+			if err := cleanup(); err != nil {
+				t.Fatalf("unexpected error cleaning up after execution: %v", err)
+			}
+		})
+	}
 }
 
 func setup() (func() error, error) {
