@@ -5,7 +5,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
@@ -30,7 +29,7 @@ func New(path string) (*Node, error) {
 	}
 
 	n := Node{Name: fi.Name(), Children: []*Node{}}
-	descriptionData, err := ioutil.ReadFile(filepath.Join(path, DefaultDescriptionFile))
+	descriptionData, err := os.ReadFile(filepath.Join(path, DefaultDescriptionFile))
 	if err == nil {
 		n.Description = string(descriptionData)
 	}
