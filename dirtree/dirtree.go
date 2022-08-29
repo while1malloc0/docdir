@@ -64,7 +64,7 @@ func (n *Node) String() string {
 }
 
 // based on https://github.com/campoy/tools/tree
-func visit(w io.Writer, node *Node, indent string) error {
+func visit(w io.Writer, node *Node, prefix string) error {
 	s := node.Name
 	if node.Description != "" {
 		s = fmt.Sprintf("%s # %s", node.Name, node.Description)
@@ -73,12 +73,12 @@ func visit(w io.Writer, node *Node, indent string) error {
 	add := "│   "
 	for i, child := range node.Children {
 		if i == len(node.Children)-1 {
-			fmt.Fprintf(w, indent+"└── ")
+			fmt.Fprintf(w, prefix+"└── ")
 			add = "    "
 		} else {
-			fmt.Fprintf(w, indent+"├── ")
+			fmt.Fprintf(w, prefix+"├── ")
 		}
-		err := visit(w, child, indent+add)
+		err := visit(w, child, prefix+add)
 		if err != nil {
 			return err
 		}
