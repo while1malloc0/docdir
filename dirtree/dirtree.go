@@ -2,6 +2,7 @@
 package dirtree
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -60,7 +61,7 @@ func New(path string) (*Node, error) {
 func (n *Node) String() string {
 	var s strings.Builder
 	visit(&s, n, "")
-	return s.String()
+	return align(s.String())
 }
 
 // based on https://github.com/campoy/tools/tree
@@ -84,6 +85,44 @@ func visit(w io.Writer, node *Node, prefix string) error {
 		}
 	}
 	return nil
+}
+
+func align(in string) string {
+	var out strings.Builder
+
+	scanner := bufio.NewScanner(strings.NewReader(in))
+	longest := -1
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Split(line, "#")
+		nameAndIndent := strings.TrimRight(parts[0], " ")
+		nameAndIndent = strings.Replace(nameAndIndent, "├──", "   ", 1)
+		nameAndIndent = strings.Replace(nameAndIndent, "└──", "   ", 1)
+		if len(nameAndIndent) > longest {
+			longest = len(nameAndIndent)
+		}
+	}
+	// longest name+indent pair + 2 spaces
+	lengthToMeet := longest + 2
+	scanner = bufio.NewScanner(strings.NewReader(in))
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Split(line, "#")
+		if len(parts) == 1 {
+			// no description provided
+			fmt.Fprintln(&out, line)
+			continue
+		}
+		nameAndIndent := strings.TrimRight(parts[0], " ")
+		normalizedLen := nameAndIndent
+		normalizedLen = strings.Replace(normalizedLen, "├──", "   ", 1)
+		normalizedLen = strings.Replace(normalizedLen, "└──", "   ", 1)
+		description := strings.TrimSpace(parts[1])
+		paddingNeeded := lengthToMeet - len(normalizedLen)
+		padding := strings.Repeat(" ", paddingNeeded)
+		fmt.Fprintf(&out, "%s%s# %s\n", nameAndIndent, padding, description)
+	}
+	return out.String()
 }
 
 func filterNonDirs(path string, candidates []string) []string {

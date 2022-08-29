@@ -33,8 +33,8 @@ If a `DESCRIPTION` file is found, the first sentence of that file will be printe
 ```shell
 $ cd examples/nested
 $ docdir with-description
-with-description # this example has descriptions in it
-├── has-no-sub-dirs # this directory has no subdirectories
-└── has-sub-dirs # this directory has subdirectories
-    └── a-sub-dir # this directory is a subdirectory
+with-description     # this example has descriptions in it
+├── has-no-sub-dirs  # this directory has no subdirectories
+└── has-sub-dirs     # this directory has subdirectories
+    └── a-sub-dir    # this directory is a subdirectory
 ```
