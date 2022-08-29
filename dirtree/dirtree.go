@@ -65,7 +65,11 @@ func (n *Node) String() string {
 
 // based on https://github.com/campoy/tools/tree
 func visit(w io.Writer, node *Node, indent string) error {
-	fmt.Fprintln(w, node.Name)
+	s := node.Name
+	if node.Description != "" {
+		s = fmt.Sprintf("%s # %s", node.Name, node.Description)
+	}
+	fmt.Fprintln(w, s)
 	add := "│   "
 	for i, child := range node.Children {
 		if i == len(node.Children)-1 {

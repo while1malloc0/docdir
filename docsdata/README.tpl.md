@@ -14,3 +14,6 @@ Running `docdir` on an empty directory with no summary files will simply print t
 
 Any subdirectories will be printed a-la `tree`.
 [embedmd]:# (../e2e/testdata/nested.ct shell)
+
+If a `DESCRIPTION` file is found, the first sentence of that file will be printed.
+[embedmd]:# (../e2e/testdata/nested-description.ct shell)
