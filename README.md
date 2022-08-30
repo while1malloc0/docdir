@@ -49,3 +49,12 @@ mixed-description    # this example has descriptions in it
 └── has-sub-dirs
     └── a-sub-dir    # this directory is a subdirectory
 ```
+
+However, you can disable this behavior with the `-skip-missing` flag (note that all subdirectories of a skipped directory are also skipped).
+
+```shell
+$ cd examples/nested
+$ docdir -skip-missing mixed-description
+mixed-description    # this example has descriptions in it
+└── has-no-sub-dirs  # this directory has no subdirectories
+```

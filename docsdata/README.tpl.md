@@ -20,3 +20,6 @@ If a `DESCRIPTION` file is found, the first sentence of that file will be printe
 
 By default, any subdirectories without descriptions will still be printed.
 [embedmd]:# (../e2e/testdata/mixed-description.ct shell)
+
+However, you can disable this behavior with the `-skip-missing` flag (note that all subdirectories of a skipped directory are also skipped).
+[embedmd]:# (../e2e/testdata/skipped-missing.ct shell)

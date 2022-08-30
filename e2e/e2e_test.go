@@ -34,6 +34,7 @@ func TestE2E(t *testing.T) {
 		{"a directory with subdirectories prints a-la tree", "e2e/testdata/nested.ct"},
 		{"a directory with description files prints the descriptions", "e2e/testdata/nested-description.ct"},
 		{"mixing described and nondescript directories prints both", "e2e/testdata/mixed-description.ct"},
+		{"the -skip-missing flag skips directories without descriptions", "e2e/testdata/skipped-missing.ct"},
 	}
 	for _, tc := range cases {
 		t.Run(tc.description, func(t *testing.T) {

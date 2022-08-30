@@ -7,7 +7,7 @@ import (
 )
 
 func TestRead(t *testing.T) {
-	got, err := dirtree.New("testdata/a")
+	got, err := dirtree.New("testdata/a", false)
 
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -19,7 +19,7 @@ func TestRead(t *testing.T) {
 }
 
 func TestChildren(t *testing.T) {
-	root, err := dirtree.New("testdata/a")
+	root, err := dirtree.New("testdata/a", false)
 
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -40,7 +40,7 @@ func TestChildren(t *testing.T) {
 }
 
 func TestGrandChildren(t *testing.T) {
-	root, err := dirtree.New("testdata/a")
+	root, err := dirtree.New("testdata/a", false)
 
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -65,7 +65,7 @@ func TestGrandChildren(t *testing.T) {
 }
 
 func TestDescription(t *testing.T) {
-	subject, err := dirtree.New("testdata/a")
+	subject, err := dirtree.New("testdata/a", false)
 	if err != nil {
 		t.Fatalf("unexpected error reading testdata: %v", err)
 	}
@@ -73,5 +73,15 @@ func TestDescription(t *testing.T) {
 	got := subject.Description
 	if got != want {
 		t.Fatalf("expected %s got %s", want, got)
+	}
+}
+
+func TestSkip(t *testing.T) {
+	subject, err := dirtree.New("testdata/a", true)
+	if err != nil {
+		t.Fatalf("unexpected error reading testdata: %v", err)
+	}
+	if len(subject.Children) != 0 {
+		t.Fatalf("expected Node A to have no children due to skipping. Had %d children", len(subject.Children))
 	}
 }

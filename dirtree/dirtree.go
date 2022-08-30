@@ -19,7 +19,7 @@ type Node struct {
 	Children    []*Node
 }
 
-func New(path string) (*Node, error) {
+func New(path string, skipMissing bool) (*Node, error) {
 	fi, err := os.Stat(path)
 	if err != nil {
 		return nil, err
@@ -30,6 +30,9 @@ func New(path string) (*Node, error) {
 
 	n := Node{Name: fi.Name(), Children: []*Node{}}
 	descriptionData, err := os.ReadFile(filepath.Join(path, DefaultDescriptionFile))
+	if os.IsNotExist(err) && skipMissing {
+		return nil, nil
+	}
 	if err == nil {
 		n.Description = string(descriptionData)
 	}
@@ -47,11 +50,14 @@ func New(path string) (*Node, error) {
 	names = filterNonDirs(path, names)
 	sort.Strings(names)
 	for _, name := range names {
-		child, err := New(filepath.Join(path, name))
+		child, err := New(filepath.Join(path, name), skipMissing)
 		if err != nil {
 			return nil, err
 		}
-		n.Children = append(n.Children, child)
+		// TODO [jturner 2022-08-29]: don't love this
+		if child != nil {
+			n.Children = append(n.Children, child)
+		}
 	}
 
 	return &n, nil
