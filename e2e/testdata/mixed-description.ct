@@ -1,0 +1,6 @@
+$ cd examples/nested
+$ docdir mixed-description
+mixed-description    # this example has descriptions in it
+├── has-no-sub-dirs  # this directory has no subdirectories
+└── has-sub-dirs
+    └── a-sub-dir    # this directory is a subdirectory

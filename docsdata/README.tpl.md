@@ -9,7 +9,7 @@ A small tool for summarizing directory structures
 
 ## Quickstart
 
-Running `docdir` on an empty directory with no summary files will simply print the name of the directory.
+Running `docdir` on an empty directory with no description files will simply print the name of the directory.
 [embedmd]:# (../e2e/testdata/simple.ct shell)
 
 Any subdirectories will be printed a-la `tree`.
@@ -17,3 +17,6 @@ Any subdirectories will be printed a-la `tree`.
 
 If a `DESCRIPTION` file is found, the first sentence of that file will be printed.
 [embedmd]:# (../e2e/testdata/nested-description.ct shell)
+
+By default, any subdirectories without descriptions will still be printed.
+[embedmd]:# (../e2e/testdata/mixed-description.ct shell)

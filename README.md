@@ -9,7 +9,7 @@ A small tool for summarizing directory structures
 
 ## Quickstart
 
-Running `docdir` on an empty directory with no summary files will simply print the name of the directory.
+Running `docdir` on an empty directory with no description files will simply print the name of the directory.
 
 ```shell
 $ cd examples/simple
@@ -36,5 +36,16 @@ $ docdir with-description
 with-description     # this example has descriptions in it
 ├── has-no-sub-dirs  # this directory has no subdirectories
 └── has-sub-dirs     # this directory has subdirectories
+    └── a-sub-dir    # this directory is a subdirectory
+```
+
+By default, any subdirectories without descriptions will still be printed.
+
+```shell
+$ cd examples/nested
+$ docdir mixed-description
+mixed-description    # this example has descriptions in it
+├── has-no-sub-dirs  # this directory has no subdirectories
+└── has-sub-dirs
     └── a-sub-dir    # this directory is a subdirectory
 ```
